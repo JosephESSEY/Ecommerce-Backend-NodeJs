@@ -24,7 +24,6 @@ Ce projet est une API RESTful pour une application e-commerce, construite avec *
 | **Node.js**        | Serveur JavaScript            |
 | **Express**        | Framework REST API            |
 | **PostgreSQL**     | Base de données relationnelle |
-| **Sequelize**      | ORM SQL                       |
 | **JWT**            | Authentification              |
 | **Bcrypt**         | Hash des mots de passe        |
 | **Dotenv**         | Variables d'environnement     |
@@ -39,8 +38,8 @@ Ce projet est une API RESTful pour une application e-commerce, construite avec *
 1. **Cloner le repo**
 
 ```bash
-git clone https://github.com/<utilisateur>/ecommerce-backend.git
-cd ecommerce-backend
+git clone https://github.com/JosephESSEY/Ecommerce-Backend-NodeJs.git
+cd Ecommerce-Backend-NodeJs
 ```
 
 2. **Installer les dépendances**
