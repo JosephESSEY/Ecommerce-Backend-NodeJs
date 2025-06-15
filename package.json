@@ -1,0 +1,25 @@
+{
+  "name": "ecommerce-backend-nodejs",
+  "version": "1.0.0",
+  "description": "Ce projet est une API RESTful pour une application e-commerce, construite avec **Node.js**, **Express**, et **PostgreSQL**, suivant l'architecture **MVC (Model-View-Controller)**. Il gère l'ensemble du backend : produits, utilisateurs, commandes, panier, authentification, etc.",
+  "main": "index.js",
+  "scripts": {
+  "start": "node src/server.js",
+  "dev": "nodemon src/server.js",
+  "test": "cross-env NODE_ENV=test jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^30.0.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.1"
+  }
+}
