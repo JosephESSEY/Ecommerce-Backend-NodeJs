@@ -9,14 +9,15 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     services:
       postgres:
         image: postgres:14
         env:
-          POSTGRES_USER: ${{ secrets.DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          POSTGRES_DB: ${{ secrets.DB_NAME }}
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
         ports:
           - 5432:5432
         options: >-
@@ -26,47 +27,46 @@ jobs:
           --health-retries 5
 
     env:
-      DB_URL: ${{ secrets.DB_URL }}
-      DB_HOST: 127.0.0.1                # Utiliser localhost dans le container CI
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      NODE_ENV: test
+      DB_HOST: localhost
+      DB_USER: test_user
+      DB_PASSWORD: test_password
       DB_PORT: 5432
-      DB_NAME: ${{ secrets.DB_NAME }}
-      PORT: ${{ secrets.PORT }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      DB_NAME: test_db
+      JWT_SECRET: test_jwt_secret_123
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Create .env file
+      - name: Configure environment
         run: |
-          echo "DB_URL=${{ secrets.DB_URL }}" >> .env
-          echo "DB_HOST=127.0.0.1" >> .env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "NODE_ENV=test" >> .env
+          echo "DB_HOST=localhost" >> .env
+          echo "DB_USER=test_user" >> .env
+          echo "DB_PASSWORD=test_password" >> .env
           echo "DB_PORT=5432" >> .env
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-          echo "PORT=${{ secrets.PORT }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "DB_NAME=test_db" >> .env
+          echo "JWT_SECRET=test_jwt_secret_123" >> .env
 
-      - name: Wait for PostgreSQL to be ready
+      - name: Wait for PostgreSQL
         run: |
           for i in {1..10}; do
-            nc -z 127.0.0.1 5432 && echo "Postgres is up!" && break
-            echo "Waiting for postgres..." && sleep 3
+            nc -z localhost 5432 && exit 0
+            sleep 3
           done
+          exit 1
 
       - name: Run linter
         run: npm run lint
 
       - name: Run tests
-        run: npm run test
+        run: npm run test -- --ci --forceExit
