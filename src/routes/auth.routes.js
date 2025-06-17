@@ -8,9 +8,8 @@ const router = express.Router();
  * @swagger
  * /users/register:
  *   post:
- *     tags:
- *       - Auth
  *     summary: Create a new user
+ *     tags: [Auth]
  *     requestBody:
  *       required: true
  *       content:
@@ -18,11 +17,14 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             required:
- *               - name
+ *               - firtname
+ *               - lastname
  *               - email
  *               - password
  *             properties:
- *               name:
+ *               firstname:
+ *                 type: string
+ *               lastname:
  *                 type: string
  *               email:
  *                 type: string
@@ -30,9 +32,38 @@ const router = express.Router();
  *                 type: string
  *     responses:
  *       201:
- *         description: User Created with success
+ *         description: User created with success
+ *       400:
+ *         description: Validation error
  */
 router.post("/register", register);
+
+/**
+ * @swagger
+ * /users/login:
+ *   post:
+ *     summary: Login a user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Success login with JWT
+ *       401:
+ *         description: Incorrect email or password
+ */
 router.post("/login", login);
 
 module.exports = router;
