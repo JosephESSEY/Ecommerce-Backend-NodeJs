@@ -114,7 +114,7 @@ MIT
 ## 📍 Liens utiles
 
 * [📘 Wiki du projet](https://github.com/<utilisateur>/Ecommerce-Backend-Nodejs/wiki) *(bientôt)*
-* [📂 Board GitHub Project](https://github.com/<utilisateur>/Ecommerce-Backend-Nodejs/projects/3)
+* [📂 Board GitHub Project](https://github.com/JosephESSEY/Ecommerce-Backend-Nodejs/projects/3)
 * [🔗 Collection Postman](./postman_collection.json) *(bientôt)*
 
 ```
