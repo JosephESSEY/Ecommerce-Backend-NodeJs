@@ -13,9 +13,11 @@ app.get('/', (req, res) => {
   res.send('Bienvenue sur l’API e-commerce');
 });
 
-const userRoute = require('./routes/auth.routes.js');
+const userRoute = require('./routes/auth.routes');
+const categoryRoute = require('./routes/category.routes');
 
 app.use('/api/users', userRoute);
+app.use('/api/categories', categoryRoute);
 
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
