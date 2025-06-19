@@ -63,7 +63,7 @@ const updateUserController = async (req, res) => {
       result: updated
     });
   } catch (err) {
-    res.status(500).json({ message: "Erreur serveur" });
+    res.status(500).json({ message: "Erreur serveur", error : err });
   }
 };
 
@@ -75,7 +75,7 @@ const deleteUserController = async (req, res) => {
     await deleteUser(req.params.id);
     res.json({ message: "User delected successfuly" });
   } catch (err) {
-    res.status(500).json({ message: "Erreur serveur" });
+    res.status(500).json({ message: "Erreur serveur", error : err });
   }
 };
 
@@ -84,7 +84,7 @@ const getProfileController = async (req, res) => {
     const user = await getUserProfile(req.user.userId);
     res.json(user);
   } catch (err) {
-    res.status(500).json({ message: "Erreur serveur" });
+    res.status(500).json({ message: "Erreur serveur", error : err });
   }
 };
 
