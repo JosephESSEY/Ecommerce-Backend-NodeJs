@@ -30,7 +30,7 @@ exports.findProductById = async (id) => {
 }
 
 exports.getAProduct = async (id) => {
-    const query = `SELECT P.name as product_name, P.description as product_description, price, stock, C.    name as category_name, C.description as category_description
+    const query = `SELECT P.name as product_name, P.description as product_description, price, stock, C.name as category_name, C.description as category_description
         FROM products P
         JOIN categories C ON C.id = P.category_id
         WHERE P.id = $1`;

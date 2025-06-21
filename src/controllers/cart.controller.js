@@ -1,10 +1,15 @@
-const {addCart, getUserCart, getQuantity, setQuantity, addProductCart, verifyProductCart, deleteProductInCart, cartModel, setPrice} = require('../models/cart.model');
+const {addCart, getUserCart, getQuantity, setQuantity, addProductCart, verifyProductCart, deleteProductInCart, cartModel, getTotalPriceCart, setTotalPriceCart} = require('../models/cart.model');
+const { getAProduct } = require('../models/product.model');
 
 const addProductToCartController = async (req, res) => {
     try {
         const user_id = req.user.userId;
         const product_id = req.body.product_id;
-        const price = req.body.price
+
+        const product = await getAProduct(product_id);
+        if(!product) return res.status(404).json("Product not found");
+        const price = parseInt(product.price);
+
         const existingCart = await getUserCart(user_id);
 
         if(!existingCart){
@@ -16,7 +21,10 @@ const addProductToCartController = async (req, res) => {
             }else{
                 const quantity = await getQuantity(newCart.id, product_id);
                 const newQuantity = parseInt(quantity) + 1;
-                const setNewQuantity = await setQuantity(newCart.id, product_id, newQuantity);
+                const newPrice = newQuantity * parseInt(price);
+                const setNewQuantity = await setQuantity(newCart.id, product_id, newQuantity, newPrice);
+                const total = await getTotalPriceCart(newCart.id);
+                await setTotalPriceCart(total, user_id);
                 return res.status(200).json({message: 'Product quantity updated', setNewQuantity});
             }
         }else{
@@ -28,8 +36,9 @@ const addProductToCartController = async (req, res) => {
                 const quantity = await getQuantity(existingCart.id, product_id);
                 const newQuantity = parseInt(quantity.quantity) + 1;
                 const newPrice = newQuantity * parseInt(price);
-                await setPrice(existingCart.id, product_id, newPrice);
-                const setNewQuantity = await setQuantity(existingCart.id, product_id, newQuantity);
+                const setNewQuantity = await setQuantity(existingCart.id, product_id, newQuantity, newPrice);
+                const total = await getTotalPriceCart(existingCart.id);
+                await setTotalPriceCart(total, user_id);
                 return res.status(200).json({message: 'Product quantity updated', setNewQuantity});
             }
         }
@@ -43,12 +52,17 @@ const addProductToCartController = async (req, res) => {
 
 const IncreaseQuantity = async (req, res) => {
     try {
-        const {cart_id, product_id, price} = req.body;
+        const user_id = req.user.userId;
+        const {cart_id, product_id} = req.body;
+        const product = await getAProduct(product_id);
+        if(!product) return res.status(404).json("Product not found");
+        const price = parseInt(product.price);
         const quantity = await getQuantity(cart_id, product_id);
         const newQuantity = parseInt(quantity.quantity) + 1;
         const newPrice = newQuantity * parseInt(price);
-        await setPrice(cart_id, product_id, newPrice);
-        const setNewQuantity = await setQuantity(cart_id, product_id, newQuantity);
+        const setNewQuantity = await setQuantity(cart_id, product_id, newQuantity, newPrice);
+        const total = await getTotalPriceCart(cart_id);
+        await setTotalPriceCart(total, user_id);
         return res.status(200).json({message: 'Product quantity updated', setNewQuantity});
     } catch (error) {
         return res.status(500).json({
@@ -60,14 +74,21 @@ const IncreaseQuantity = async (req, res) => {
 
 const ReduceQuantity = async (req, res) => {
     try {
-        const {cart_id, product_id, price} = req.body;
+        const user_id = req.user.userId;
+        const {cart_id, product_id} = req.body;
+        const product = await getAProduct(product_id);
+        if(!product) return res.status(404).json("Product not found");
+        const price = parseInt(product.price);
         const quantity = await getQuantity(cart_id, product_id);
         if(parseInt(quantity.quantity) > 1){
             const newQuantity = parseInt(quantity.quantity) - 1;
             const newPrice = newQuantity * parseInt(price);
-            await setPrice(cart_id, product_id, newPrice);
-            const setNewQuantity = await setQuantity(cart_id, product_id, newQuantity);
+            const setNewQuantity = await setQuantity(cart_id, product_id, newQuantity, newPrice);
+            const total = await getTotalPriceCart(cart_id);
+            await setTotalPriceCart(total, user_id);
             return res.status(200).json({message: 'Product quantity updated', setNewQuantity});
+        }else{
+            return
         }
     } catch (error) {
         return res.status(500).json({
