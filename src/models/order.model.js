@@ -8,3 +8,6 @@ const addOrder = async (user_id, total) => {
     return result.rows[0];
 }
 
+module.exports = {
+    addOrder,
+}
