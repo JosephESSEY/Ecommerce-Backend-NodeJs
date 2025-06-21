@@ -30,20 +30,11 @@ const verifyProductCart = async (cart_id, product_id) => {
     return execute.rows[0];
 }
 
-const setQuantity = async (cart_id, product_id, quantity) => {
+const setQuantity = async (cart_id, product_id, quantity, price) => {
     const query = `UPDATE cart_lines
-    SET quantity = $1
-    WHERE cart_id = $2 AND product_id = $3 RETURNING *`;
-    const values = [quantity, cart_id, product_id];
-    const execute = await pool.query(query, values);
-    return execute.rows[0];
-}
-
-const setPrice = async (cart_id, product_id, price) => {
-    const query = `UPDATE cart_lines
-    SET price = $1
-    WHERE cart_id = $2 AND product_id = $3 RETURNING *`;
-    const values = [price, cart_id, product_id];
+    SET quantity = $1, price = $2
+    WHERE cart_id = $3 AND product_id = $4 RETURNING *`;
+    const values = [quantity, price, cart_id, product_id];
     const execute = await pool.query(query, values);
     return execute.rows[0];
 }
@@ -65,8 +56,32 @@ const deleteProductInCart = async (cart_id, product_id) => {
     return execute.rows[0];
 }
 
+const setTotalPriceCart = async (total, user_id) => {
+    const query = `UPDATE cart
+    SET total = $1
+    WHERE user_id = $2 RETURNING *`;
+    const values = [total, user_id];
+    const execute = await pool.query(query, values);
+    return execute.rows[0];
+}
+
+const getTotalPriceCart = async (cart_id) => {
+    const query = `SELECT price 
+                   FROM cart_lines
+                   WHERE cart_id = $1`;
+    const values = [cart_id];
+    const result = await pool.query(query, values);
+    
+    let total = 0;
+    result.rows.forEach(row => {
+        total += parseInt(row.price) || 0;
+    });
+    return total;
+}
+
+
 const cartModel = async (user_id) => {
-    const query = `SELECT P.id as product_id, P.name as product_name, P.price as unique_price, L.price as prix_total, L.quantity, C.id as card_id
+    const query = `SELECT P.id as product_id, P.name as product_name, P.price as unique_price, L.price as prix_total, C.total as prix_total_panier, L.quantity, C.id as card_id
     FROM cart_lines L
     JOIN cart C ON C.id = L.cart_id
     JOIN products P ON p.id = L.product_id
@@ -78,6 +93,8 @@ const cartModel = async (user_id) => {
 }
 
 
+
+
 module.exports = {
     addCart,
     getUserCart,
@@ -87,5 +104,6 @@ module.exports = {
     getQuantity,
     deleteProductInCart,
     cartModel,
-    setPrice
+    getTotalPriceCart,
+    setTotalPriceCart
 }
