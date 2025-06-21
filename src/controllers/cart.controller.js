@@ -116,8 +116,8 @@ const deleteProductInCartController = async (req, res) => {
 
 const cart = async (req, res) => {
     try {
-        const cart_id = req.user.userId;
-        const cart = await cartModel(cart_id);
+        const user_id = req.user.userId;
+        const cart = await cartModel(user_id);
         return res.status(200).json({
             message: 'User Cart retrived successfuly',
             data: cart
