@@ -1,0 +1,77 @@
+name: Node.js CI Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      NODE_ENV: test
+      DB_HOST: localhost
+      DB_USER: test_user
+      DB_PASSWORD: test_password
+      DB_PORT: 5432
+      DB_NAME: test_db
+      JWT_SECRET: test_jwt_secret_123
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # - name: Configure environment
+      #   run: |
+      #     echo "NODE_ENV=test" >> .env
+      #     echo "DB_HOST=localhost" >> .env
+      #     echo "DB_USER=test_user" >> .env
+      #     echo "DB_PASSWORD=test_password" >> .env
+      #     echo "DB_PORT=5432" >> .env
+      #     echo "DB_NAME=test_db" >> .env
+      #     echo "JWT_SECRET=test_jwt_secret_123" >> .env
+
+      # - name: Wait for PostgreSQL
+      #   run: |
+      #     for i in {1..10}; do
+      #       nc -z localhost 5432 && exit 0
+      #       sleep 3
+      #     done
+      #     exit 1
+      # - name: Run DB migrations (init tables)
+      #   run: psql -h localhost -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME }} -f database/init.sql
+      #   env:
+      #     PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+
+
+      - name: Run linter
+        run: npm run lint
+
+      # - name: Run tests
+      #   run: npm run test -- --ci --forceExit
