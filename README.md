@@ -1,23 +1,23 @@
-# 🍭 E-Commerce Backend API (MVC)
+# E-Commerce Backend API (MVC)
 
 Ce projet est une API RESTful pour une application e-commerce, construite avec **Node.js**, **Express**, et **PostgreSQL**, suivant l'architecture **MVC (Model-View-Controller)**. Il gère l'ensemble du backend : produits, utilisateurs, commandes, panier, authentification, etc.
 
 ---
 
-## 🚀 Fonctionnalités principales
+## Fonctionnalités principales
 
-* 🔐 Authentification JWT (connexion, inscription, rôles)
-* 🛍️ Gestion du panier
-* 📦 Produits et catégories
-* 💳 Commandes, paiements
-* 📆 Historique des commandes / factures
-* 👨‍💼 Administration et gestion utilisateurs
-* 🖼️ Gestion des images produits
-* 📊 API REST bien structurée (MVC)
+* Authentification JWT (connexion, inscription, rôles)
+*  Gestion du panier
+* Produits et catégories
+* Commandes, paiements
+* Historique des commandes / factures
+* Administration et gestion utilisateurs
+*  Gestion des images produits
+* API REST bien structurée (MVC)
 
 ---
 
-## 🧱 Stack technique
+## Stack technique
 
 | Technologie        | Description                   |
 | ------------------ | ----------------------------- |
@@ -33,7 +33,7 @@ Ce projet est une API RESTful pour une application e-commerce, construite avec *
 
 ---
 
-## 🛠️ Lancement du projet en local
+##  Lancement du projet en local
 
 1. **Cloner le repo**
 
@@ -65,7 +65,7 @@ npm run dev
 
 ---
 
-## 📁 Structure MVC
+## Structure MVC
 
 ```bash
 src/
@@ -79,7 +79,7 @@ src/
 
 ---
 
-## 🔒 Sécurité
+## Sécurité
 
 * Passwords hachés (bcrypt)
 * JWT sécurisés (expiration, rôles)
@@ -88,7 +88,7 @@ src/
 
 ---
 
-## 🚦 Intégration continue (CI)
+## Intégration continue (CI)
 
 * GitHub Actions lance les tests à chaque push sur `develop` ou `main`
 * Merges interdits sans tests réussis
@@ -96,7 +96,7 @@ src/
 
 ---
 
-## 🙌 Contribuer
+## Contribuer
 
 1. Fork ce repo
 2. Crée une branche `feature/<nom>`
@@ -105,16 +105,16 @@ src/
 
 ---
 
-## 📝 Licence
+## Licence
 
 MIT
 
 ---
 
-## 📍 Liens utiles
+## Liens utiles
 
-* [📘 Wiki du projet](https://github.com/JosephESSEY/Ecommerce-Backend-NodeJs/wiki) *(bientôt)*
-* [📂 Board GitHub Project](https://github.com/users/JosephESSEY/projects/3)
-* [🔗 Collection Postman](./postman_collection.json) *(bientôt)*
+* [Wiki du projet](https://github.com/JosephESSEY/Ecommerce-Backend-NodeJs/wiki) *(bientôt)*
+* [Board GitHub Project](https://github.com/users/JosephESSEY/projects/3)
+* [Collection Postman](./postman_collection.json) *(bientôt)*
 
 ```
